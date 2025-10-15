@@ -2,8 +2,9 @@ import { Link, useNavigate } from "react-router-dom";
 import { handleError, handleSuccess } from "../utils/Toast";
 import { ToastContainer } from "react-toastify";
 import { useForm } from "react-hook-form";
-import getBaseurl from "../utils/getbaseurl";
+
 import axios from "axios";
+import getBaseurl from './../utils/getBaseurl';
 
 const AdminLogin = () => {
   const {
