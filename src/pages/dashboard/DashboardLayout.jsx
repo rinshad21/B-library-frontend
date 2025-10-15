@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useState } from "react";
-import getBaseurl from "../../utils/getbaseurl";
+
 import axios from "axios";
 import Loading from "../../components/Loading";
 
@@ -9,6 +9,7 @@ import { GrMoney } from "react-icons/gr";
 import { RiBookOpenFill } from "react-icons/ri";
 import { FaCartArrowDown } from "react-icons/fa";
 import { IoIosLogOut, IoMdTrendingUp } from "react-icons/io";
+import getBaseurl from "./../../utils/getBaseurl";
 const DashboardLayout = () => {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState({});
