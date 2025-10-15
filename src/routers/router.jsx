@@ -13,9 +13,10 @@ import App from "./../App";
 import AdminLogin from "../components/AdminLogin";
 
 import ManageBook from "../pages/dashboard/manageBooks/ManageBook";
-import AddBook from "../pages/dashboard/addBook/addBook";
+
 import EditBooks from "../pages/dashboard/editBook/EditBooks";
 import DashboardLayout from "./../pages/dashboard/DashboardLayout";
+import AddBook from "./../pages/dashboard/addBook/AddBook";
 
 const router = createBrowserRouter([
   {
