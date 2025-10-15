@@ -1,0 +1,23 @@
+@import "tailwindcss";
+
+
+
+@theme {
+  
+  --color-book-violet-50: oklch(99.04% 0.007 296.25);
+  --color-book-violet-100: oklch(97.22% 0.016 295.45);
+  --color-book-violet-200: oklch(93.18% 0.038 293.42);
+  --color-book-violet-300: oklch(86.34% 0.076 292.83);
+  --color-book-violet-400: oklch(77.6% 0.126 292.51);
+  --color-book-violet-500: oklch(67.76% 0.187 292.05);
+  --color-book-violet-600: oklch(59.48% 0.218 290.79);
+  --color-book-violet-700: oklch(49.82% 0.228 289.43);
+  --color-book-violet-800: oklch(39.1% 0.207 288.7);
+  --color-book-violet-900: oklch(31.29% 0.181 288.8);
+  --color-book-violet-950: oklch(19.98% 0.117 291.68);
+  --color-book-white: #ffffff;
+  --font-display : "satoshi","san-serif"
+
+  
+}
+
