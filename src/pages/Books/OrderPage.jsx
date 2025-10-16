@@ -1,16 +1,41 @@
+import { Link, useNavigate } from "react-router-dom";
+import Loading from "../../components/Loading";
 import { useAuth } from "../../context/AuthContext";
 import { useGetOrderbyEmailQuery } from "../../redux/features/order/ordersApi";
 import { downloadInvoicePDF } from "./../../utils/downloadInvoice";
+import { useEffect } from "react";
 const OrderPage = () => {
   const { currentUser } = useAuth();
   const {
     data: orders = [],
     isLoading,
     isError,
-  } = useGetOrderbyEmailQuery(currentUser.email);
-  if (isLoading) return <div>loading</div>;
-  if (isError) return <div>error getting order data</div>;
+  } = useGetOrderbyEmailQuery(currentUser?.email, {
+    skip: !currentUser,
+  });
 
+  const navigate = useNavigate();
+
+  if (isLoading) return <Loading />;
+  if (isError) return <div>error getting order data</div>;
+  if (!currentUser) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[70vh] text-center space-y-4">
+        <h2 className="text-2xl font-semibold text-gray-800">
+          You’re not logged in
+        </h2>
+        <p className="text-gray-500 max-w-md">
+          Please sign in to view your orders and track your purchases.
+        </p>
+        <Link
+          to="/login"
+          className="inline-block text-book-violet-600 font-medium hover:text-book-violet-700 hover:underline transition-all duration-200"
+        >
+          Go to Login →
+        </Link>
+      </div>
+    );
+  }
   return (
     <div className="container mx-auto p-6">
       <h2 className="text-2xl font-semibold mb-4">Your Orders</h2>

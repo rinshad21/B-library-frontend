@@ -20,11 +20,12 @@ export const AuthProvider = ({ children }) => {
 
   //google provider
   const googleprovider = new GoogleAuthProvider();
+  
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setCurrentUser(user); // Set the user object (or null)
       setLoading(false); // Stop loading once Firebase status is known
-    }); // Cleanup function: this stops listening when the component unmounts
+    });
 
     return unsubscribe;
   }, []);
@@ -41,6 +42,7 @@ export const AuthProvider = ({ children }) => {
   //signup with google
 
   const signInWithGoogle = async () => {
+    provider.setCustomParameters({ prompt: "select_account" });
     return await signInWithPopup(auth, googleprovider);
   };
   //logout user
