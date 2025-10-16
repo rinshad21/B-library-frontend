@@ -4,6 +4,7 @@ import { getImgUrl } from "../../utils/getImageUrl";
 import { useDispatch } from "react-redux";
 import { FiShoppingCart } from "react-icons/fi";
 import { addToCart } from "../../redux/features/cart/cartSlice";
+import Loading from "./../../components/Loading";
 
 const SingleBook = () => {
   const { id } = useParams();
@@ -17,7 +18,7 @@ const SingleBook = () => {
     dispatch(addToCart(product));
   };
 
-  if (isLoading) return <div>loading...</div>;
+  if (isLoading) return <Loading />;
   if (isError) return <div>error,couldn't load the book</div>;
   if (!book) return <div>No book found</div>; // edge case
 
