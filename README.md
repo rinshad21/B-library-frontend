@@ -49,3 +49,8 @@ For full functionality, clone and run the backend from here:
 git clone https://github.com/rinshad21/b-library-frontend.git
 cd b-library-frontend
 npm install
+```
+#screenshots
+<img width="1906" height="912" alt="image" src="https://github.com/user-attachments/assets/5a7dd360-ec9f-4ff3-8adf-9ba0cbbbb0e9" />
+
+
