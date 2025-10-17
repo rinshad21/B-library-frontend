@@ -81,7 +81,6 @@ const CheckoutPage = () => {
 
                 <div className="lg:col-span-2">
                   <div className="grid gap-4 gap-y-2 text-sm grid-cols-1 md:grid-cols-5">
-                    {/* Full Name */}
                     <div className="md:col-span-5">
                       <label htmlFor="name">Full Name</label>
                       <input
@@ -95,14 +94,13 @@ const CheckoutPage = () => {
                       )}
                     </div>
 
-                    {/* Phone */}
                     <div className="md:col-span-5">
                       <label htmlFor="phone">Phone Number</label>
                       <input
                         type="number"
                         id="phone"
                         className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
-                        {...register("phone", { required: true })} // ✅ Added register
+                        {...register("phone", { required: true })}
                         placeholder="+123 456 7890"
                       />
                       {errors.phone && (
@@ -117,10 +115,10 @@ const CheckoutPage = () => {
                         type="text"
                         name="email"
                         id="email"
-                        className="h-10 border mt-1 rounded px-4 w-full bg-green-200"
+                        className="h-10 border mt-1 rounded px-4 w-full  bg-red-400"
                         disabled
                         defaultValue={currentUser?.email}
-                        placeholder="already filled"
+                        placeholder="sign in to order"
                       />
                     </div>
 
