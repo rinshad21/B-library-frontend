@@ -1,6 +1,6 @@
 # 📚 B-Library Frontend
 
-The **frontend** of **B-Library** — a modern book e-commerce web app built using **React**, **Tailwind CSS**, **Redux Toolkit**, and **Firebase Authentication**.  
+The **frontend** of **B-Library** — a modern book e-commerce web app built using **Mern stack** , **Redux Toolkit**, and **Firebase Authentication**.  
 Users can browse, purchase, and manage books, while admins can manage the catalog and orders via a secure dashboard.
 
 ---
