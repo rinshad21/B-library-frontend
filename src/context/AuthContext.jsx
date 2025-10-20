@@ -10,44 +10,62 @@ import {
 } from "firebase/auth";
 
 const AuthContext = createContext();
+
 export const useAuth = () => {
   return useContext(AuthContext);
 };
-//auth provider
+
+// Auth provider
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  //google provider
-  const googleprovider = new GoogleAuthProvider();
-  
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setCurrentUser(user); // Set the user object (or null)
-      setLoading(false); // Stop loading once Firebase status is known
+      setCurrentUser(user);
+      setLoading(false);
     });
 
     return unsubscribe;
   }, []);
 
-  //register a user
+  // Register a user
   const registerUser = async (email, password) => {
     return await createUserWithEmailAndPassword(auth, email, password);
   };
-  //login user
+
+  // Login user
   const loginUser = async (email, password) => {
     return await signInWithEmailAndPassword(auth, email, password);
   };
 
-  //signup with google
-
+  // Sign up with Google
   const signInWithGoogle = async () => {
-    provider.setCustomParameters({ prompt: "select_account" });
-    return await signInWithPopup(auth, googleprovider);
+    try {
+      // Create a fresh provider instance popup each time
+      const googleProvider = new GoogleAuthProvider();
+
+      // Force account selection every time
+      googleProvider.setCustomParameters({
+        prompt: "select_account",
+      });
+
+      return await signInWithPopup(auth, googleProvider);
+    } catch (error) {
+      console.error("Google sign-in error:", error);
+      throw error;
+    }
   };
-  //logout user
+
+  // Logout user
   const logout = async () => {
-    return await signOut(auth);
+    try {
+      await signOut(auth);
+      // Optional: Clear any additional cached data
+      setCurrentUser(null);
+    } catch (error) {
+      console.error("Logout error:", error);
+    }
   };
 
   const value = {

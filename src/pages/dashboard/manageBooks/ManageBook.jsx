@@ -12,7 +12,6 @@ const ManageBook = () => {
   const { data, isLoading, isError, refetch } = useFetchAllBooksQuery();
   const [deleteBook] = useDeleteBookMutation();
 
-  // Make sure books is always an array
   const books = data?.Book || [];
 
   const handleDelete = async (id) => {
