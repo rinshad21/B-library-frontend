@@ -13,7 +13,7 @@ function Banner() {
             <h1 className='md:text-5xl text-2xl font-medium mb-7'>New Releases This Week</h1>
             <p className='mb-10'>unleash your reading list with some of the latest and greatest collection this week.we present you new fiction,adventure,self help and comic books at a %50 discount checkout our collection</p>
 
-            <button className=' bg-book-violet-600 text-book-white rounded-xl p-1 sm:px-6 px-2  flex items-center'>Subscribe</button>
+            
         </div>
 </div>
   )

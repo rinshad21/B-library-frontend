@@ -61,7 +61,7 @@ export const AuthProvider = ({ children }) => {
   const logout = async () => {
     try {
       await signOut(auth);
-      // Optional: Clear any additional cached data
+      // Clear any additional cached data
       setCurrentUser(null);
     } catch (error) {
       console.error("Logout error:", error);
