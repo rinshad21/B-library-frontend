@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import InputField from "./../addBook/InputField";
 import SelectField from "./../addBook/SelectField";
 import { useParams } from "react-router-dom";
@@ -7,7 +7,6 @@ import {
   useUpdatebookMutation,
 } from "../../../redux/features/books/bookApi";
 import { useForm } from "react-hook-form";
-
 import Loading from "../../../components/Loading";
 import getBaseurl from "./../../../utils/getBaseurl";
 import Swal from "sweetalert2";
@@ -23,6 +22,11 @@ const EditBooks = () => {
   } = useFetchBookByIdQuery(id);
   const [updateBook] = useUpdatebookMutation();
   const { register, handleSubmit, setValue, reset } = useForm();
+
+  const [imageFile, setImageFile] = useState(null);
+  const [imageFileName, setImageFileName] = useState("");
+  const [uploading, setUploading] = useState(false);
+
   useEffect(() => {
     if (bookData?.book) {
       const book = bookData.book;
@@ -35,41 +39,84 @@ const EditBooks = () => {
       setValue("coverImage", book.coverImage);
     }
   }, [bookData, setValue]);
-  console.log("bookData", bookData);
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImageFile(file);
+      setImageFileName(file.name);
+    }
+  };
 
   const onSubmit = async (data) => {
-    const updateBookData = {
-      title: data.title,
-      description: data.description,
-      category: data.category,
-      trending: data.trending,
-      oldPrice: Number(data.oldPrice),
-      newPrice: Number(data.newPrice),
-      coverImage: data.coverImage || bookData.coverImage,
-    };
+    setUploading(true);
+
     try {
+      let imageUrl = bookData?.book?.coverImage; // Keep existing image by default
+
+      // Upload new image if selected
+      if (imageFile) {
+        const formData = new FormData();
+        formData.append("file", imageFile);
+        formData.append("upload_preset", "b-libre");
+
+        const cloudinaryRes = await axios.post(
+          "https://api.cloudinary.com/v1_1/dshvwoxsw/image/upload",
+          formData
+        );
+
+        console.log("Cloudinary response:", cloudinaryRes.data);
+        imageUrl = cloudinaryRes.data.secure_url;
+      }
+
+      const updateBookData = {
+        title: data.title,
+        description: data.description,
+        category: data.category,
+        trending: data.trending,
+        oldPrice: Number(data.oldPrice),
+        newPrice: Number(data.newPrice),
+        coverImage: imageUrl,
+      };
+
       await axios.put(`${getBaseurl()}/api/books/edit/${id}`, updateBookData, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
+
       Swal.fire({
-        title: "Book added",
-        text: "Your book is updated successfully!",
+        title: "Book Updated",
+        text: "Your book has been updated successfully!",
         icon: "success",
-        showCancelButton: true,
         confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Yes,confirm!",
+        confirmButtonText: "OK",
       });
+
+      setImageFile(null);
+      setImageFileName("");
+      refetch(); // Refresh book data
     } catch (error) {
-      console.log("failed to edit", error.response?.data || error.message);
-      alert("failed to update");
+      console.error(
+        "Failed to update book:",
+        error.response?.data || error.message
+      );
+
+      Swal.fire({
+        title: "Error",
+        text: error.response?.data?.message || "Failed to update book",
+        icon: "error",
+        confirmButtonColor: "#d33",
+      });
+    } finally {
+      setUploading(false);
     }
   };
+
   if (isLoading) return <Loading />;
-  if (isError) return <div> error fetching book data</div>;
+  if (isError) return <div>Error fetching book data</div>;
+
   return (
     <div className="max-w-lg mx-auto m-3 md:p-6 p-3 bg-white rounded-lg shadow-md">
       <h2 className="text-2xl font-bold text-gray-800 mb-4">Update Book</h2>
@@ -103,6 +150,7 @@ const EditBooks = () => {
           ]}
           register={register}
         />
+
         <div className="mb-4">
           <label className="inline-flex items-center">
             <input
@@ -134,20 +182,46 @@ const EditBooks = () => {
           register={register}
         />
 
-        <InputField
-          label="Cover Image URL"
-          name="coverImage"
-          type="text"
-          step="any"
-          placeholder="Cover Image URL"
-          register={register}
-        />
+        {/* Current Cover Image Preview */}
+        {bookData?.book?.coverImage && (
+          <div className="mb-4">
+            <label className="block text-sm font-semibold text-gray-700 mb-2">
+              Current Cover Image
+            </label>
+            <img
+              src={bookData.book.coverImage}
+              alt="Current cover"
+              className="w-32 h-auto object-cover rounded-md"
+            />
+          </div>
+        )}
+
+        {/* File Upload Input */}
+        <div className="mb-4">
+          <label className="block text-sm font-semibold text-gray-700 mb-2">
+            Upload New Cover Image (Optional)
+          </label>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleFileChange}
+            className="mb-2 w-full"
+          />
+          {imageFileName && (
+            <p className="text-sm text-gray-600">Selected: {imageFileName}</p>
+          )}
+        </div>
 
         <button
           type="submit"
-          className="w-full py-2 bg-blue-500 text-white font-bold rounded-md"
+          disabled={uploading}
+          className={`w-full py-2 text-white font-bold rounded-md ${
+            uploading
+              ? "bg-gray-400 cursor-not-allowed"
+              : "bg-blue-500 hover:bg-blue-600"
+          }`}
         >
-          Update Book
+          {uploading ? "Updating..." : "Update Book"}
         </button>
       </form>
     </div>

@@ -27,7 +27,7 @@ const booksApi = createApi({
       providesTags: (result, error, id) => [{ type: "Books", id }],
     }),
     addbook: builder.mutation({
-      query: (newBook) => ({
+    query: (newBook) => ({
         url: `/create-book`,
         method: "POST",
         body: newBook,

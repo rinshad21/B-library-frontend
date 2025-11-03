@@ -88,19 +88,14 @@ const DashboardLayout = () => {
         </div>
 
         {/* Quick links / actions */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4  lg:ml-100 ">
           <Link
             to="/dashboard/manage-newbook"
             className="p-4 bg-white rounded shadow hover:bg-purple-50 text-purple-600 text-center"
           >
             Manage Books
           </Link>
-          <Link
-            to="/dashboard/manage-newbook"
-            className="p-4 bg-white rounded shadow hover:bg-purple-50 text-purple-600 text-center"
-          >
-            Edit Books
-          </Link>
+
           <Link
             to="/dashboard/add-newbook"
             className="p-4 bg-white rounded shadow hover:bg-purple-50 text-purple-600 text-center"

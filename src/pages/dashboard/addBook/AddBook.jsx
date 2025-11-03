@@ -5,7 +5,7 @@ import InputField from "./InputField";
 import SelectField from "./SelectField";
 import { handleError, handleSuccess } from "../../../utils/Toast";
 import Swal from "sweetalert2";
-
+import axios from "axios";
 const AddBook = () => {
   const {
     register,
@@ -20,31 +20,69 @@ const AddBook = () => {
   const [addBook, { isLoading, isError }] = useAddbookMutation();
 
   const onSubmit = async (data) => {
-    const newBookData = {
-      ...data,
-      coverImage: imageFileName,
-    };
-    console.log(newBookData);
+  try {
+    let imageUrl = "";
 
-    try {
-      await addBook(newBookData).unwrap();
-      Swal.fire({
-        title: "Book added",
-        text: "Your book is uploaded successfully!",
-        icon: "success",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Yes,confirm!",
-      });
-      reset();
-      setImageFile(null);
-      setImageFileName("");
-    } catch (error) {
-      console.error("Failed to add book:", error);
-      handleError("Error adding book!");
+    // Upload image to Cloudinary first
+    if (imageFile) {
+      const formData = new FormData();
+      formData.append("file", imageFile);
+      formData.append("upload_preset", "b-libre");
+
+      const cloudinaryRes = await axios.post(
+        "https://api.cloudinary.com/v1_1/dshvwoxsw/image/upload",
+        formData
+      );
+
+      console.log("Cloudinary response:", cloudinaryRes.data);
+      imageUrl = cloudinaryRes.data.secure_url;
+    } else {
+      handleError("Please select an image!");
+      return;
     }
-  };
+
+    // Then save book to database
+    const newBookData = {
+      title: data.title,
+      description: data.description,
+      category: data.category,
+      coverImage: imageUrl,
+      oldPrice: Number(data.oldPrice),
+      newPrice: Number(data.newPrice),
+    };
+
+    console.log("Sending to backend:", newBookData); // Debug log
+
+    await addBook(newBookData).unwrap();
+    
+    Swal.fire({
+      title: "Book added",
+      text: "Your book is uploaded successfully!",
+      icon: "success",
+      confirmButtonColor: "#3085d6",
+      confirmButtonText: "OK",
+    });
+    
+    reset();
+    setImageFile(null);
+    setImageFileName("");
+    
+  } catch (error) {
+    console.error("Full error:", error);
+    
+    if (error.response) {
+      // Cloudinary error
+      console.error("Cloudinary error:", error.response.data);
+      handleError("Error uploading image: " + error.response.data.error?.message);
+    } else if (error.data) {
+      // Backend error
+      console.error("Backend error:", error.data);
+      handleError(error.data.message || "Error saving book!");
+    } else {
+      handleError("An unexpected error occurred!");
+    }
+  }
+};
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];

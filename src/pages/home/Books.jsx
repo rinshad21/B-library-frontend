@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import BookCard from "../Books/BookCard";
 import { useFetchAllBooksQuery } from "../../redux/features/books/bookApi";
+import { FiSearch } from "react-icons/fi";
 
 const categories = [
   "Choose a genre",
@@ -8,18 +9,18 @@ const categories = [
   "Fiction",
   "Horror",
   "Adventure",
+  "comics",
 ];
 
 const Books = () => {
-  //fetching book data from backend
   const { data } = useFetchAllBooksQuery();
   const books = data?.Book || [];
 
-  //saving catgory state
   const [selectedCategory, setSelectedCategory] = useState("Trending");
+  const [searchTerm, setSearchTerm] = useState("");
 
-  //filter books based on category
-  const filteredBooks =
+  // category filtering
+  const categoryFiltered =
     selectedCategory === "Trending"
       ? books.filter((book) => book.trending)
       : selectedCategory === "Choose a genre"
@@ -28,29 +29,51 @@ const Books = () => {
           (book) => book.category === selectedCategory.toLowerCase()
         );
 
+  // search filtering
+  const filteredBooks = categoryFiltered.filter((book) =>
+    book.title.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
-    <div className="py-10">
-      <h2 className="text-2xl font-semibold mb-6">Trending collection</h2>
-      {/* catergory filtering */}
-      <div className="mb-8 flex items-center ">
+    <div>
+      <div className="bg-white rounded-lg shadow-md p-4 mb-2">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* Search */}
+          <div className="relative">
+            <FiSearch className="absolute left-3 top-3 text-gray-400" />
+            <input
+              type="text"
+              placeholder="Search by title "
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            />
+          </div>
+        </div>
+
+        {/* Category Filter */}
         <select
+          value={selectedCategory}
           onChange={(e) => setSelectedCategory(e.target.value)}
-          name="category"
-          id="category "
-          className="border bg-[#c9c5e6] border-gray-300 rounded-md focus:outline-none px-4 py-2 "
+          className="px-6 mt-2 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
         >
-          {categories.map((category, index) => {
-            return (
-              <option key={index} value={category}>
-                {category}
-              </option>
-            );
-          })}
+          {categories.map((cat) => (
+            <option key={cat} value={cat}>
+              {cat === "all" ? "All Categories" : cat}
+            </option>
+          ))}
         </select>
       </div>
-      {filteredBooks.map((book, index) => (
-        <BookCard key={index} book={book} />
-      ))}
+      {/* Books display */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        {filteredBooks.length > 0 ? (
+          filteredBooks.map((book, index) => (
+            <BookCard key={index} book={book} />
+          ))
+        ) : (
+          <p className="text-gray-500">No books found.</p>
+        )}
+      </div>
     </div>
   );
 };
