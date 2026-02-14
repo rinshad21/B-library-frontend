@@ -147,6 +147,8 @@ const EditBooks = () => {
             { value: "fiction", label: "Fiction" },
             { value: "horror", label: "Horror" },
             { value: "adventure", label: "Adventure" },
+            { value: "Comics", label: "Comics" },
+            { value: "Self Help", label: "Self Help" },
           ]}
           register={register}
         />

@@ -20,69 +20,67 @@ const AddBook = () => {
   const [addBook, { isLoading, isError }] = useAddbookMutation();
 
   const onSubmit = async (data) => {
-  try {
-    let imageUrl = "";
+    try {
+      let imageUrl = "";
 
-    // Upload image to Cloudinary first
-    if (imageFile) {
-      const formData = new FormData();
-      formData.append("file", imageFile);
-      formData.append("upload_preset", "b-libre");
+      // Upload image to Cloudinary first
+      if (imageFile) {
+        const formData = new FormData();
+        formData.append("file", imageFile);
+        formData.append("upload_preset", "b-libre");
 
-      const cloudinaryRes = await axios.post(
-        "https://api.cloudinary.com/v1_1/dshvwoxsw/image/upload",
-        formData
-      );
+        const cloudinaryRes = await axios.post(
+          "https://api.cloudinary.com/v1_1/dshvwoxsw/image/upload",
+          formData
+        );
 
-      console.log("Cloudinary response:", cloudinaryRes.data);
-      imageUrl = cloudinaryRes.data.secure_url;
-    } else {
-      handleError("Please select an image!");
-      return;
+        console.log("Cloudinary response:", cloudinaryRes.data);
+        imageUrl = cloudinaryRes.data.secure_url;
+      } else {
+        handleError("Please select an image!");
+        return;
+      }
+
+      const newBookData = {
+        title: data.title,
+        description: data.description,
+        category: data.category,
+        coverImage: imageUrl,
+        oldPrice: Number(data.oldPrice),
+        newPrice: Number(data.newPrice),
+      };
+
+      await addBook(newBookData).unwrap();
+
+      Swal.fire({
+        title: "Book added",
+        text: "Your book is uploaded successfully!",
+        icon: "success",
+        confirmButtonColor: "#3085d6",
+        confirmButtonText: "OK",
+      });
+
+      reset();
+      setImageFile(null);
+      setImageFileName("");
+    } catch (error) {
+      console.error("Full error:", error);
+
+      if (error.response) {
+        // Cloudinary error
+        console.error("Cloudinary error:", error.response.data);
+        handleError(
+          "Error uploading image: " + error.response.data.error?.message
+        );
+      } else if (error.data) {
+        // Backend error
+        console.error("Backend error:", error.data);
+        handleError(error.data.message || "Error saving book!");
+      } else {
+        handleError("An unexpected error occurred!");
+      }
     }
-
-    // Then save book to database
-    const newBookData = {
-      title: data.title,
-      description: data.description,
-      category: data.category,
-      coverImage: imageUrl,
-      oldPrice: Number(data.oldPrice),
-      newPrice: Number(data.newPrice),
-    };
-
-    console.log("Sending to backend:", newBookData); // Debug log
-
-    await addBook(newBookData).unwrap();
-    
-    Swal.fire({
-      title: "Book added",
-      text: "Your book is uploaded successfully!",
-      icon: "success",
-      confirmButtonColor: "#3085d6",
-      confirmButtonText: "OK",
-    });
-    
-    reset();
-    setImageFile(null);
-    setImageFileName("");
-    
-  } catch (error) {
-    console.error("Full error:", error);
-    
-    if (error.response) {
-      // Cloudinary error
-      console.error("Cloudinary error:", error.response.data);
-      handleError("Error uploading image: " + error.response.data.error?.message);
-    } else if (error.data) {
-      // Backend error
-      console.error("Backend error:", error.data);
-      handleError(error.data.message || "Error saving book!");
-    } else {
-      handleError("An unexpected error occurred!");
-    }
-  }
-};
+  };
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -125,6 +123,8 @@ const AddBook = () => {
               { value: "fiction", label: "Fiction" },
               { value: "horror", label: "Horror" },
               { value: "adventure", label: "Adventure" },
+              { value: "Comics", label: "Comics" },
+              { value: "Self Help", label: "Self Help" },
             ]}
             register={register}
           />

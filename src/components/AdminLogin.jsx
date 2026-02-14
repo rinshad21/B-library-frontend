@@ -4,7 +4,7 @@ import { ToastContainer } from "react-toastify";
 import { useForm } from "react-hook-form";
 
 import axios from "axios";
-import getBaseurl from './../utils/getBaseurl';
+import getBaseurl from "./../utils/getBaseurl";
 
 const AdminLogin = () => {
   const {
@@ -19,7 +19,7 @@ const AdminLogin = () => {
     try {
       const response = await axios.post(`${getBaseurl()}/auth/admin`, data, {
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
       });
       const auth = response.data;
@@ -29,7 +29,7 @@ const AdminLogin = () => {
         setTimeout(() => {
           localStorage.removeItem("token");
           handleError("token has expired ,please login again");
-          navigate("/");
+          navigate("/login");
         }, 3600 * 1000);
       }
       handleSuccess("admin login successfull");
@@ -72,7 +72,7 @@ const AdminLogin = () => {
             </div>
           </div>
 
-          {/* Password */}
+ 
           <div>
             <label
               htmlFor="password"
@@ -96,7 +96,7 @@ const AdminLogin = () => {
             </div>
           </div>
 
-          {/* Submit */}
+    
           <div>
             <button
               type="submit"

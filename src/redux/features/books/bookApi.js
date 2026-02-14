@@ -27,12 +27,12 @@ const booksApi = createApi({
       providesTags: (result, error, id) => [{ type: "Books", id }],
     }),
     addbook: builder.mutation({
-    query: (newBook) => ({
+      query: (newBook) => ({
         url: `/create-book`,
         method: "POST",
         body: newBook,
       }),
-      invalidatesTags: ["Books"], //the book will prefetch to included to api
+      invalidatesTags: ["Books"], //the bok will prefetch to included to api
     }),
     updatebook: builder.mutation({
       query: ({ id, ...rest }) => ({

@@ -10,6 +10,7 @@ const categories = [
   "Horror",
   "Adventure",
   "comics",
+  "self help"
 ];
 
 const Books = () => {
@@ -38,7 +39,7 @@ const Books = () => {
     <div>
       <div className="bg-white rounded-lg shadow-md p-4 mb-2">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {/* Search */}
+        
           <div className="relative">
             <FiSearch className="absolute left-3 top-3 text-gray-400" />
             <input
@@ -51,7 +52,7 @@ const Books = () => {
           </div>
         </div>
 
-        {/* Category Filter */}
+      
         <select
           value={selectedCategory}
           onChange={(e) => setSelectedCategory(e.target.value)}
@@ -64,7 +65,7 @@ const Books = () => {
           ))}
         </select>
       </div>
-      {/* Books display */}
+      
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
         {filteredBooks.length > 0 ? (
           filteredBooks.map((book, index) => (

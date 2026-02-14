@@ -12,21 +12,18 @@ const Login = () => {
 
   const navigate = useNavigate();
 
-  // react-hook-form setup
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
 
-  // login handler (dummy for now)
   const onSubmit = async (data) => {
     console.log(data);
     try {
       await loginUser(data.email, data.password);
       handleSuccess("login successfull");
 
-      // simulate redirect
       setTimeout(() => {
         navigate("/");
       }, 1000);
@@ -42,7 +39,6 @@ const Login = () => {
       await signInWithGoogle();
       handleSuccess("login successfull");
 
-      // simulate redirect
       setTimeout(() => {
         navigate("/");
       }, 1000);

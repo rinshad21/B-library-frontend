@@ -1,6 +1,7 @@
-import jsPDF from "jspdf";
 
-export const downloadInvoicePDF = (order) => {
+
+export const downloadInvoicePDF = async (order) => {
+  const { jsPDF } = await import("jspdf");
   const doc = new jsPDF();
   doc.setFontSize(16);
   doc.text("Invoice", 20, 20);

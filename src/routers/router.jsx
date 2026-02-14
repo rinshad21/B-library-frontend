@@ -1,73 +1,130 @@
-import { Navigate, createBrowserRouter } from "react-router-dom";
-
-import Home from "../pages/home/Home";
-import Login from "../components/Login";
-import Signup from "../components/Signup";
-import CartPage from "../pages/Books/CartPage";
-import CheckoutPage from "../pages/Books/CheckoutPage";
-import SingleBook from "./../pages/Books/SingleBook";
-import PrivateRoutes from "./PrivateRoutes";
-import OrderPage from "../pages/Books/OrderPage";
-import AdminRoutes from "./AdminRoutes";
+import { createBrowserRouter } from "react-router-dom";
 import App from "./../App";
+import { Suspense, lazy } from "react";
+import Loading from "../components/Loading";
 import AdminLogin from "../components/AdminLogin";
+import PrivateRoutes from "./PrivateRoutes";
+import AdminRoutes from "./AdminRoutes";
 
-import ManageBook from "../pages/dashboard/manageBooks/ManageBook";
-
-import EditBooks from "../pages/dashboard/editBook/EditBooks";
-import DashboardLayout from "./../pages/dashboard/DashboardLayout";
-import AddBook from "./../pages/dashboard/addBook/AddBook";
+// Lazy loading components
+const Home = lazy(() => import("../pages/home/Home"));
+const Login = lazy(() => import("../components/Login"));
+const Signup = lazy(() => import("../components/Signup"));
+const CartPage = lazy(() => import("../pages/Books/CartPage"));
+const CheckoutPage = lazy(() => import("../pages/Books/CheckoutPage"));
+const SingleBook = lazy(() => import("./../pages/Books/SingleBook"));
+const OrderPage = lazy(() => import("../pages/Books/OrderPage"));
+const DashboardLayout = lazy(() => import("./../pages/dashboard/DashboardLayout"));
+const AddBook = lazy(() => import("./../pages/dashboard/addBook/AddBook"));
+const EditBooks = lazy(() => import("../pages/dashboard/editBook/EditBooks"));
+const ManageBook = lazy(() => import("../pages/dashboard/manageBooks/ManageBook"));
 
 const router = createBrowserRouter([
-  // Main site layout (App handles Navbar, footer, etc.)
   {
     path: "/",
     element: <App />,
     children: [
-      { index: true, element: <Home /> },
-      { path: "about", element: <div>About</div> },
-      { path: "login", element: <Login /> },
-      { path: "signup", element: <Signup /> },
-      { path: "cart", element: <CartPage /> },
-      { path: "order", element: <OrderPage /> },
       {
-        path: "checkout",
+        path: "/",
+        element: (
+          <Suspense fallback={<Loading />}>
+            <Home />
+          </Suspense>
+        ),
+      },
+      {
+        path: "/about",
+        element: <div>About</div>,
+      },
+      {
+        path: "/login",
+        element: (
+          <Suspense fallback={<Loading />}>
+            <Login />
+          </Suspense>
+        ),
+      },
+      {
+        path: "/signup",
+        element: (
+          <Suspense fallback={<Loading />}>
+            <Signup />
+          </Suspense>
+        ),
+      },
+      {
+        path: "/cart",
+        element: (
+          <Suspense fallback={<Loading />}>
+            <CartPage />
+          </Suspense>
+        ),
+      },
+      {
+        path: "/order",
+        element: (
+          <Suspense fallback={<Loading />}>
+            <OrderPage />
+          </Suspense>
+        ),
+      },
+      {
+        path: "/checkout",
         element: (
           <PrivateRoutes>
-            <CheckoutPage />
+            <Suspense fallback={<Loading />}>
+              <CheckoutPage />
+            </Suspense>
           </PrivateRoutes>
         ),
       },
-      { path: "books/:id", element: <SingleBook /> },
+      {
+        path: "/books/:id",
+        element: (
+          <Suspense fallback={<Loading />}>
+            <SingleBook />
+          </Suspense>
+        ),
+      },
     ],
   },
-
-  // Admin login page (not part of App layout)
   {
     path: "/admin",
     element: <AdminLogin />,
   },
-
-  // Admin dashboard layout (full screen)
   {
     path: "/dashboard",
     element: (
       <AdminRoutes>
-        <DashboardLayout />
+        <Suspense fallback={<Loading />}>
+          <DashboardLayout />
+        </Suspense>
       </AdminRoutes>
     ),
     children: [
       {
         path: "add-newbook",
-        element: <AddBook />,
+        element: (
+          <Suspense fallback={<Loading />}>
+            <AddBook />
+          </Suspense>
+        ),
       },
       {
         path: "edit-book/:id",
-        element: <EditBooks />,
+        element: (
+          <Suspense fallback={<Loading />}>
+            <EditBooks />
+          </Suspense>
+        ),
       },
       {
         path: "manage-newbook",
-        element: <ManageBook />,
+        element: (
+          <Suspense fallback={<Loading />}>
+            <ManageBook />
+          </Suspense>
+        ),
       },
     ],
   },

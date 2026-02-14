@@ -5,7 +5,7 @@ import { MdDeleteOutline } from "react-icons/md";
 import { Link } from "react-router-dom";
 
 const CartPage = () => {
-  //using cartslice in cartpage using redux
+  //cartslice
   const cartItems = useSelector((state) => state.cart.cartItems);
   //dispatch using redux
   const dispatch = useDispatch();
@@ -15,11 +15,10 @@ const CartPage = () => {
     .reduce((acc, item) => acc + item.newPrice * item.quantity, 0)
     .toFixed(2);
 
-  //remove from cart
   const handleRemoveFromcart = (product) => {
     dispatch(removeFromCart(product));
   };
-  //clear cart
+  
   const handleClearcart = (product) => {
     dispatch(clearCart());
   };
@@ -46,7 +45,7 @@ const CartPage = () => {
             <div className="flow-root">
               {cartItems.length > 0 ? (
                 <ul role="list" className="-my-6 divide-y divide-gray-200">
-                  {/* mapping cart items as list to be displayed */}
+                
                   {cartItems.map((product) => (
                     <li key={product?._id} className="flex py-6">
                       <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
