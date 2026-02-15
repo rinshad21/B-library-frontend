@@ -123,8 +123,8 @@ const AddBook = () => {
               { value: "fiction", label: "Fiction" },
               { value: "horror", label: "Horror" },
               { value: "adventure", label: "Adventure" },
-              { value: "Comics", label: "Comics" },
-              { value: "Self Help", label: "Self Help" },
+              { value: "comics", label: "Comics" },
+              { value: "self help", label: "Self Help" },
             ]}
             register={register}
           />

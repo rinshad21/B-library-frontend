@@ -29,7 +29,7 @@ const SingleBook = () => {
           <img
             src={`${getImgUrl(book?.coverImage)}`}
             alt=""
-            className="w-full bg-cover p-2 rounded-md cursor-pointer hover:scale-105 transition-all duration-200"
+            className="w-full h-64 object-cover p-2 rounded-md cursor-pointer hover:scale-105 transition-all duration-200"
           />
         </div>
 
@@ -39,9 +39,7 @@ const SingleBook = () => {
           </h3>
 
           <p className="text-gray-600 mb-5">
-            {book?.description?.length > 80
-              ? `${book.description.slice(0, 80)}...`
-              : book?.description}
+           {book?.description}
           </p>
 
           <p className="font-medium mb-5">

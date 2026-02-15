@@ -128,7 +128,7 @@ const CheckoutPage = () => {
                         type="text"
                         id="city"
                         className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
-                        {...register("city", { required: true })} // ✅ Added register
+                        {...register("city", { required: true })} 
                       />
                       {errors.city && (
                         <p className="text-red-500 text-sm">City is required</p>
@@ -190,7 +190,7 @@ const CheckoutPage = () => {
                         <input
                           type="checkbox"
                           checked={isChecked}
-                          onChange={(e) => setIsChecked(e.target.checked)} // ✅ Added onChange
+                          onChange={(e) => setIsChecked(e.target.checked)} 
                         />
                         <label htmlFor="billing_same" className="ml-2">
                           I agree to the{" "}

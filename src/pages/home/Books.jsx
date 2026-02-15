@@ -5,34 +5,32 @@ import { FiSearch } from "react-icons/fi";
 
 const categories = [
   "Choose a genre",
+  "All",
   "Business",
   "Fiction",
   "Horror",
   "Adventure",
-  "comics",
-  "self help"
+  "Comics",
+  "Self Help",
 ];
 
 const Books = () => {
   const { data } = useFetchAllBooksQuery();
   const books = data?.Book || [];
 
-  const [selectedCategory, setSelectedCategory] = useState("Trending");
+  const [selectedCategory, setSelectedCategory] = useState("All");
   const [searchTerm, setSearchTerm] = useState("");
 
   // category filtering
-  const categoryFiltered =
-    selectedCategory === "Trending"
-      ? books.filter((book) => book.trending)
-      : selectedCategory === "Choose a genre"
-      ? books
-      : books.filter(
-          (book) => book.category === selectedCategory.toLowerCase()
-        );
-
+ const categoryFiltered =
+  selectedCategory === "All" || selectedCategory === "Choose a genre"
+    ? books
+    : books.filter(
+        (book) => book.category?.toLowerCase() === selectedCategory.toLowerCase()
+      );
   // search filtering
   const filteredBooks = categoryFiltered.filter((book) =>
-    book.title.toLowerCase().includes(searchTerm.toLowerCase())
+   book.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
